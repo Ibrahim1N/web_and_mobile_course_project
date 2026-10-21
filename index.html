@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courtyard Canteen — Event Tickets</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/venue-data.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body>
+  <header class="page-header">
+    <div>
+      <h1>Courtyard Canteen</h1>
+      <p class="tagline" id="event-name">Friday Night Jazz Supper</p>
+    </div>
+    <a class="cart-link" href="#cart-heading">Cart (<span id="cart-count">0</span>)</a>
+  </header>
+
+  <main class="layout">
+    <section class="panel map-panel" aria-labelledby="map-heading">
+      <div class="panel-head">
+        <h2 id="map-heading">Venue map</h2>
+        <ul class="legend" id="zone-legend" aria-label="Zones and prices"></ul>
+      </div>
+
+      <div class="map-viewport" id="map-viewport">
+        <div class="map-world" id="map-world"></div>
+      </div>
+
+      <ul class="legend state-legend" aria-label="Seat states">
+        <li><span class="swatch available"></span>Available</li>
+        <li><span class="swatch inspected"></span>Inspecting</li>
+        <li><span class="swatch in-cart"></span>In cart</li>
+        <li><span class="swatch unavailable"></span>Unavailable</li>
+      </ul>
+    </section>
+
+    <aside class="side">
+      <section class="panel" aria-labelledby="details-heading">
+        <h2 id="details-heading">Seat details</h2>
+        <div id="seat-details">
+          <p class="placeholder">Select a seat on the map to see its details and price.</p>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="cart-heading">
+        <h2 id="cart-heading">Your cart</h2>
+        <ul class="cart-list" id="cart-list"></ul>
+        <p class="placeholder" id="cart-empty">Your cart is empty.</p>
+        <div class="cart-total">
+          <span>Total</span>
+          <strong id="cart-total">0 AZN</strong>
+        </div>
+      </section>
+    </aside>
+  </main>
+</body>
+</html>
