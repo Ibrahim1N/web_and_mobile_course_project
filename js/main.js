@@ -3,8 +3,10 @@ const model = buildVenueModel();
 const mapViewport = document.getElementById("map-viewport");
 const mapWorld = document.getElementById("map-world");
 const zoneLegend = document.getElementById("zone-legend");
+const seatDetails = document.getElementById("seat-details");
 
 const seatSize = 22;
+let inspectedSeatId = null;
 
 function placeBox(element, x, y, width, height) {
   element.style.left = `${x}px`;
@@ -94,6 +96,61 @@ function renderSeats() {
   });
 }
 
+function findSeat(seatId) {
+  return model.seats.find(seat => seat.id === seatId);
+}
+
+function findSeatButton(seatId) {
+  return mapWorld.querySelector(`[data-seat-id="${seatId}"]`);
+}
+
+function createParagraph(text, className) {
+  const paragraph = document.createElement("p");
+  paragraph.classList.add(className);
+  paragraph.textContent = text;
+  return paragraph;
+}
+
+function renderSeatDetails(seat) {
+  const zone = findZone(seat.zoneId);
+
+  const title = document.createElement("h3");
+  title.classList.add("detail-zone");
+  title.style.color = zone.color;
+  title.textContent = zone.name;
+
+  const place = createParagraph(`${zone.unit} ${seat.tableId} · Seat ${seat.number}`, "detail-place");
+  const description = createParagraph(zone.description, "detail-description");
+  const price = createParagraph(formatPrice(seat.price), "detail-price");
+
+  let status;
+  if (seat.status === "unavailable") {
+    status = createParagraph("Sold – this seat cannot be booked.", "detail-status");
+    status.classList.add("sold");
+  } else {
+    status = createParagraph("Available", "detail-status");
+  }
+
+  seatDetails.replaceChildren(title, place, description, price, status);
+}
+
+function inspectSeat(seatId) {
+  if (inspectedSeatId !== null) {
+    findSeatButton(inspectedSeatId).classList.remove("inspected");
+  }
+
+  inspectedSeatId = seatId;
+  findSeatButton(seatId).classList.add("inspected");
+  renderSeatDetails(findSeat(seatId));
+}
+
+function handleMapClick(event) {
+  const button = event.target.closest(".seat");
+  if (!button || !mapWorld.contains(button)) return;
+
+  inspectSeat(button.getAttribute("data-seat-id"));
+}
+
 function fitToViewport() {
   const padding = 16;
   const availableWidth = mapViewport.clientWidth - padding * 2;
@@ -117,6 +174,7 @@ function init() {
   fitToViewport();
 
   window.addEventListener("resize", fitToViewport);
+  mapWorld.addEventListener("click", handleMapClick);
 
   const soldCount = model.seats.filter(seat => seat.status === "unavailable").length;
   console.log(`${venue.name}: ${model.tables.length} tables, ${model.seats.length} seats, ${soldCount} sold`);
