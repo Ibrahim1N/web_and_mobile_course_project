@@ -7,6 +7,7 @@ const seatDetails = document.getElementById("seat-details");
 
 const seatSize = 22;
 let inspectedSeatId = null;
+const cart = [];
 
 function placeBox(element, x, y, width, height) {
   element.style.left = `${x}px`;
@@ -131,7 +132,30 @@ function renderSeatDetails(seat) {
     status = createParagraph("Available", "detail-status");
   }
 
-  seatDetails.replaceChildren(title, place, description, price, status);
+  const addButton = document.createElement("button");
+  addButton.type = "button";
+  addButton.classList.add("add-button");
+  addButton.textContent = "Add to cart";
+
+  if (seat.status === "unavailable") {
+    addButton.disabled = true;
+  } else if (cart.includes(seat.id)) {
+    addButton.disabled = true;
+    addButton.textContent = "Already in cart";
+  }
+
+  addButton.addEventListener("click", () => addToCart(seat.id));
+
+  seatDetails.replaceChildren(title, place, description, price, status, addButton);
+}
+
+function addToCart(seatId) {
+  if (cart.includes(seatId)) return;
+
+  cart.push(seatId);
+  findSeatButton(seatId).classList.add("in-cart");
+  document.getElementById("cart-count").textContent = cart.length;
+  renderSeatDetails(findSeat(seatId));
 }
 
 function inspectSeat(seatId) {

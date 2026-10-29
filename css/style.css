@@ -252,6 +252,33 @@ h1, h2 {
   color: #b91c1c;
 }
 
+.add-button {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #1d4ed8;
+}
+
+.add-button:focus {
+  outline: 3px solid #facc15;
+}
+
+.add-button:disabled {
+  color: #666666;
+  background-color: #dddddd;
+  cursor: not-allowed;
+}
+
 .legend {
   display: flex;
   flex-wrap: wrap;
