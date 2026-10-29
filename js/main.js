@@ -144,11 +144,32 @@ function inspectSeat(seatId) {
   renderSeatDetails(findSeat(seatId));
 }
 
+function clearInspection() {
+  if (inspectedSeatId === null) return;
+
+  findSeatButton(inspectedSeatId).classList.remove("inspected");
+  inspectedSeatId = null;
+
+  const message = createParagraph("Select a seat on the map to see its details and price.", "placeholder");
+  seatDetails.replaceChildren(message);
+}
+
 function handleMapClick(event) {
   const button = event.target.closest(".seat");
   if (!button || !mapWorld.contains(button)) return;
 
-  inspectSeat(button.getAttribute("data-seat-id"));
+  const seatId = button.getAttribute("data-seat-id");
+  if (seatId === inspectedSeatId) {
+    clearInspection();
+  } else {
+    inspectSeat(seatId);
+  }
+}
+
+function handleKeydown(event) {
+  if (event.key === "Escape") {
+    clearInspection();
+  }
 }
 
 function fitToViewport() {
@@ -175,6 +196,7 @@ function init() {
 
   window.addEventListener("resize", fitToViewport);
   mapWorld.addEventListener("click", handleMapClick);
+  document.addEventListener("keydown", handleKeydown);
 
   const soldCount = model.seats.filter(seat => seat.status === "unavailable").length;
   console.log(`${venue.name}: ${model.tables.length} tables, ${model.seats.length} seats, ${soldCount} sold`);
