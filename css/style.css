@@ -336,6 +336,15 @@ h1, h2 {
   list-style: none;
 }
 
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #eeeeee;
+}
+
 .cart-total {
   display: flex;
   justify-content: space-between;

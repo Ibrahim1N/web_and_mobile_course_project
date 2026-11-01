@@ -154,8 +154,41 @@ function addToCart(seatId) {
 
   cart.push(seatId);
   findSeatButton(seatId).classList.add("in-cart");
-  document.getElementById("cart-count").textContent = cart.length;
+  renderCart();
   renderSeatDetails(findSeat(seatId));
+}
+
+function renderCart() {
+  const cartList = document.getElementById("cart-list");
+  const cartEmpty = document.getElementById("cart-empty");
+
+  const items = cart.map(seatId => {
+    const seat = findSeat(seatId);
+    const zone = findZone(seat.zoneId);
+
+    const item = document.createElement("li");
+    item.classList.add("cart-item");
+
+    const name = document.createElement("span");
+    name.textContent = `${zone.name} · ${seat.tableId} · Seat ${seat.number}`;
+
+    const price = document.createElement("strong");
+    price.textContent = formatPrice(seat.price);
+
+    item.append(name, price);
+    return item;
+  });
+
+  cartList.replaceChildren(...items);
+  cartEmpty.hidden = cart.length > 0;
+
+  let total = 0;
+  cart.forEach(seatId => {
+    total += findSeat(seatId).price;
+  });
+
+  document.getElementById("cart-total").textContent = formatPrice(total);
+  document.getElementById("cart-count").textContent = cart.length;
 }
 
 function inspectSeat(seatId) {
