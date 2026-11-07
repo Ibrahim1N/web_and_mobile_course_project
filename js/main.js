@@ -158,6 +158,26 @@ function addToCart(seatId) {
   renderSeatDetails(findSeat(seatId));
 }
 
+function removeFromCart(seatId) {
+  const index = cart.indexOf(seatId);
+  if (index === -1) return;
+
+  cart.splice(index, 1);
+  findSeatButton(seatId).classList.remove("in-cart");
+  renderCart();
+
+  if (seatId === inspectedSeatId) {
+    renderSeatDetails(findSeat(seatId));
+  }
+}
+
+function handleCartClick(event) {
+  const button = event.target.closest(".remove-button");
+  if (!button) return;
+
+  removeFromCart(button.getAttribute("data-seat-id"));
+}
+
 function renderCart() {
   const cartList = document.getElementById("cart-list");
   const cartEmpty = document.getElementById("cart-empty");
@@ -175,7 +195,14 @@ function renderCart() {
     const price = document.createElement("strong");
     price.textContent = formatPrice(seat.price);
 
-    item.append(name, price);
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.classList.add("remove-button");
+    removeButton.setAttribute("data-seat-id", seat.id);
+    removeButton.setAttribute("aria-label", `Remove ${seat.tableId} Seat ${seat.number} from cart`);
+    removeButton.textContent = "×";
+
+    item.append(name, price, removeButton);
     return item;
   });
 
@@ -253,6 +280,7 @@ function init() {
 
   window.addEventListener("resize", fitToViewport);
   mapWorld.addEventListener("click", handleMapClick);
+  document.getElementById("cart-list").addEventListener("click", handleCartClick);
   document.addEventListener("keydown", handleKeydown);
 
   const soldCount = model.seats.filter(seat => seat.status === "unavailable").length;

@@ -345,6 +345,31 @@ h1, h2 {
   border-bottom: 1px solid #eeeeee;
 }
 
+.cart-item span {
+  flex: 1;
+}
+
+.remove-button {
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+  color: #b91c1c;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: #fee2e2;
+}
+
+.remove-button:focus {
+  outline: 3px solid #facc15;
+}
+
 .cart-total {
   display: flex;
   justify-content: space-between;
